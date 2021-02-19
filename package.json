@@ -1,0 +1,31 @@
+{
+  "name": "catan-app-api",
+  "version": "1.0.0",
+  "description": "Catan App API",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "concurrently -k npm:server:*",
+    "server:games": "NODE_PATH=. nodemon ./games.ts",
+    "server:leagues": "NODE_PATH=. nodemon ./leagues.ts",
+    "server:players": "NODE_PATH=. nodemon ./players.ts",
+    "graphql": "NODE_PATH=. nodemon ./index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/federation": "^0.21.0",
+    "@apollo/gateway": "^0.22.0",
+    "apollo-server": "^2.19.2",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.11.15",
+    "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.25",
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "tslint": "^6.1.3"
+  }
+}
