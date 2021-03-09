@@ -18,6 +18,14 @@ export type Score = {
 	devPoints: number;
 };
 
+export interface Schedule {
+	cet: Date;
+	adt: Date;
+	gmt: Date;
+}
+export interface GameTime extends Document {
+	timeOfGame: Date;
+}
 export interface Game extends Document {
 	date: string;
 	scores: Score[];

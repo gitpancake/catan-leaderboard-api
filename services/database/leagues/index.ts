@@ -1,5 +1,6 @@
 import { Score, League } from '../../../types';
 import { LeagueModel } from '../models/league';
+import { GetGameById } from '../games';
 
 export const FindAllLeagues = async (): Promise<League[]> => {
 	const leagues = await LeagueModel.find({});
@@ -34,16 +35,30 @@ const addScores = (scoreA?: number, scoreB?: number): number => {
 export const AddGameToLeague = async (
 	leagueId: string,
 	gameId: string,
-	scores: Score[],
 ): Promise<League> => {
 	const league = await LeagueModel.findById(leagueId);
+	const game = await GetGameById(gameId);
 
-	const newScores: Score[] = scores.map((score) => {
-		const playerLeagueScore = league.totalScores.find(
+	if (!game) return;
+
+	const totalScores = league.totalScores;
+	const gameScores = game.scores;
+
+	const newScores = gameScores.filter(
+		(gameScore) =>
+			!totalScores
+				.map((totalScore) => totalScore.playerName)
+				.includes(gameScore.playerName),
+	);
+
+	const updatedPlayerScores: Score[] = totalScores.map((score) => {
+		const playerLeagueScore = gameScores.find(
 			(leagueTotalScore) => leagueTotalScore.playerName === score.playerName,
 		);
 
-		if (playerLeagueScore)
+		if (playerLeagueScore) {
+			console.log(playerLeagueScore.longestRoads, score.longestRoads);
+
 			return {
 				playerName: playerLeagueScore.playerName,
 				cities: addScores(playerLeagueScore.cities, score.cities),
@@ -65,12 +80,12 @@ export const AddGameToLeague = async (
 					score.victoryPoints,
 				),
 			};
-		else return score;
+		} else return score;
 	});
 
 	return await LeagueModel.findByIdAndUpdate(leagueId, {
 		$push: { games: gameId },
-		$set: { totalScores: newScores },
+		$set: { totalScores: [...newScores, ...updatedPlayerScores] },
 	})
 		.then((league) => league)
 		.catch((err) => err);

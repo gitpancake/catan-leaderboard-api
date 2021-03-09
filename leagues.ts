@@ -2,7 +2,11 @@ import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 
 import { League } from './types';
-import { CreateLeague, FindAllLeagues } from './services/database/leagues';
+import {
+	AddGameToLeague,
+	CreateLeague,
+	FindAllLeagues,
+} from './services/database/leagues';
 import { createDatabaseConnection } from './services/database/connection';
 
 require('dotenv').config();
@@ -35,6 +39,11 @@ const typeDefs = gql`
 
 	input CreateLeagueInput {
 		name: String!
+	}
+
+	input LinkLeagueToGameInput {
+		leagueId: ID!
+		gameId: ID!
 	}
 
 	extend type Mutation {

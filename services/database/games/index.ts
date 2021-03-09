@@ -24,7 +24,7 @@ export const CreateGame = async (
 		.then((game) => game)
 		.catch((err) => err);
 
-	await AddGameToLeague(leagueId, newGameSave._id, scores);
+	await AddGameToLeague(leagueId, newGameSave._id);
 
 	return newGameSave;
 };

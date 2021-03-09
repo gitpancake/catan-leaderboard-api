@@ -17,7 +17,6 @@ const typeDefs = gql`
 		_id: ID!
 		date: String!
 		scores: [Score]
-		totals: [Score]
 	}
 
 	type Score {
