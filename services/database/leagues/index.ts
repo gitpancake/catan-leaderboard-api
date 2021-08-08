@@ -57,8 +57,6 @@ export const AddGameToLeague = async (
 		);
 
 		if (playerLeagueScore) {
-			console.log(playerLeagueScore.longestRoads, score.longestRoads);
-
 			return {
 				playerName: playerLeagueScore.playerName,
 				cities: addScores(playerLeagueScore.cities, score.cities),
