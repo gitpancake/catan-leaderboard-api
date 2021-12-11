@@ -1,0 +1,32 @@
+type Score {
+	playerName: String!
+	victoryPoints: Int!
+	cities: Int!
+	settlements: Int!
+	longestRoads: Int!
+	largestArmies: Int!
+	devPoints: Int!
+}
+
+type League @key(fields: "_id") {
+	_id: ID!
+	name: String!
+	games: [Game]
+}
+
+extend type Game @key(fields: "_id") {
+	_id: ID! @external
+	scores: [Score]
+}
+
+extend type Query {
+	leagues: [League]
+}
+
+input CreateLeagueInput {
+	name: String!
+}
+
+extend type Mutation {
+	createLeague(userPayload: CreateLeagueInput): League
+}

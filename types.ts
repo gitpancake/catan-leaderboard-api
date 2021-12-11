@@ -26,9 +26,17 @@ export interface Schedule {
 export interface GameTime extends Document {
 	timeOfGame: Date;
 }
+
 export interface Game extends Document {
 	date: string;
 	scores: Score[];
+	leagueId?: string;
+}
+
+export interface GraphQlGame {
+	date: string;
+	scores: Score[];
+	league: League;
 }
 
 export interface GameWithTotals extends Game {
