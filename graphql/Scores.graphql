@@ -1,0 +1,13 @@
+type Score {
+	playerName: String!
+	victoryPoints: Int!
+	cities: Int!
+	settlements: Int!
+	longestRoads: Int!
+	largestArmies: Int!
+	devPoints: Int!
+}
+
+extend type Query {
+	scoresForGame: [Score]
+}

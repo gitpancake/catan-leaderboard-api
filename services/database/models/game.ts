@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Game } from '../../../types';
+import * as Database from '../../../types/database';
 
 const GameSchema: mongoose.Schema = new mongoose.Schema({
 	date: {
@@ -13,6 +13,6 @@ const GameSchema: mongoose.Schema = new mongoose.Schema({
 	},
 });
 
-const GameModel = mongoose.model<Game>('Game', GameSchema);
+const GameModel = mongoose.model<Database.Game>('Game', GameSchema);
 
 export { GameModel };

@@ -2,7 +2,7 @@ import * as Mongoose from 'mongoose';
 
 export interface Score extends Mongoose.Document {
 	playerId: string;
-	gameId?: string;
+	gameId: string;
 	victoryPoints: number;
 	cities: number;
 	settlements: number;

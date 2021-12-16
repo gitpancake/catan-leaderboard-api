@@ -1,10 +1,10 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 
-import { Ref } from './types';
 import * as GraphQL from './types/graphql';
+import * as Database from './types/database';
 import { createDatabaseConnection } from './services/database/connection';
-import { CreateGame, GetGameById, GetAllGames } from './services/games';
+import GameService from './services/games';
 import { FileReader } from './services/files/FileReader';
 
 require('dotenv').config();
@@ -12,21 +12,31 @@ require('dotenv').config();
 const graphQlSchema = new FileReader('./graphql/Games.graphql').getFile();
 const typeDefs = gql(graphQlSchema);
 
+const _gameService = new GameService();
+
 const resolvers = {
 	Game: {
-		__resolveReference(ref: Ref) {
-			return GetGameById(ref._id);
+		async __resolveReference(ref: Database.Ref) {
+			const game = await _gameService.GetGameById(ref._id);
+
+			return _gameService.hydrateGame(game);
 		},
 	},
 	Query: {
 		games: async (): Promise<GraphQL.Game[]> => {
-			return await GetAllGames();
+			const games = await _gameService.GetAllGames();
+
+			return await Promise.all(
+				games.map(async (game) => _gameService.hydrateGame(game)),
+			);
 		},
 	},
 	Mutation: {
 		createGame: async (_, userPayload): Promise<GraphQL.Game> => {
 			const { date, leagueId, scores } = userPayload.userPayload;
-			return await CreateGame(date, leagueId, scores);
+			const newGame = await _gameService.CreateGame(date, leagueId, scores);
+
+			return await _gameService.hydrateGame(newGame);
 		},
 	},
 };

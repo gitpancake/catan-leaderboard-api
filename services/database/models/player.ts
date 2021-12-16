@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Player } from '../../../types';
+import * as Database from '../../../types/database';
 
 const PlayerSchema: mongoose.Schema = new mongoose.Schema({
 	playerName: {
@@ -8,6 +8,6 @@ const PlayerSchema: mongoose.Schema = new mongoose.Schema({
 	},
 });
 
-const PlayerModel = mongoose.model<Player>('Player', PlayerSchema);
+const PlayerModel = mongoose.model<Database.Player>('Player', PlayerSchema);
 
 export { PlayerModel };
