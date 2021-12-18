@@ -1,27 +1,27 @@
 import * as GraphQL from '../../types/graphql';
 import * as Database from '../../types/database';
-import { IPlayerService, PlayerService } from '../players';
+import PlayerService, { IPlayerService } from '../players';
 import GameService, { IGameService } from '../games';
 import { ScoreModel } from '../database/models/score';
 
 export interface IScoreService {
 	CreateScores(score: Database.Score[]): Promise<Database.Score[]>;
 	GetScoresForPlayer(playerId: string): Promise<Database.Score[]>;
-	GetScoresForGame(gameId: string): Promise<Database.Score[]>;
+	GetScoresByGameId(gameId: string): Promise<Database.Score[]>;
 	GetScoreById(scoreId: string): Promise<Database.Score>;
 	HydrateScore(
 		score: Database.Score,
-		player?: GraphQL.Player,
+		player?: Database.Player,
 	): Promise<GraphQL.Score>;
 }
 
 export default class ScoreService implements IScoreService {
 	private _playerService: IPlayerService;
-	private _gameService: IGameService;
-
 	constructor() {
 		this._playerService = new PlayerService();
-		this._gameService = new GameService();
+	}
+	async GetScoresByGameId(gameId: string): Promise<Database.Score[]> {
+		return await ScoreModel.find({ gameId });
 	}
 
 	async GetScoreById(scoreId: string): Promise<Database.Score> {
@@ -33,7 +33,7 @@ export default class ScoreService implements IScoreService {
 	}
 
 	async GetScoresForPlayer(playerId: string): Promise<Database.Score[]> {
-		const player: GraphQL.Player = await this._playerService.FindPlayerById(
+		const player: Database.Player = await this._playerService.GetPlayerById(
 			playerId,
 		);
 
@@ -46,26 +46,12 @@ export default class ScoreService implements IScoreService {
 		return await ScoreModel.find({ playerId });
 	}
 
-	async GetScoresForGame(gameId: string): Promise<Database.Score[]> {
-		const game: Database.Game = await this._gameService.GetGameById(gameId);
-
-		if (!game) {
-			throw new Error(
-				`Fatal - Game ${game} not found while retrieving scores for ${gameId}`,
-			);
-		}
-
-		const gameScores: Database.Score[] = await ScoreModel.find({ gameId });
-
-		return gameScores;
-	}
-
 	async HydrateScore(
 		score: Database.Score,
-		player?: GraphQL.Player,
+		player?: Database.Player,
 	): Promise<GraphQL.Score> {
 		if (!player) {
-			player = await this._playerService.FindPlayerById(score.playerId);
+			player = await this._playerService.GetPlayerById(score.playerId);
 		}
 
 		return {

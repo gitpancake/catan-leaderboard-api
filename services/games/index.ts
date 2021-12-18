@@ -60,8 +60,23 @@ export default class GameService implements IGameService {
 		return await GameModel.findById(gameId);
 	}
 
+	async GetScoresForGame(gameId: string): Promise<Database.Score[]> {
+		const game: Database.Game = await this.GetGameById(gameId);
+
+		if (!game) {
+			throw new Error(
+				`Fatal - Game ${game} not found while retrieving scores for ${gameId}`,
+			);
+		}
+
+		const gameScores: Database.Score[] =
+			await this._scoreService.GetScoresByGameId(game._id);
+
+		return gameScores;
+	}
+
 	async hydrateGame(game: Database.Game): Promise<GraphQL.Game> {
-		const linkedScores = await this._scoreService.GetScoresForGame(game._id);
+		const linkedScores = await this._scoreService.GetScoresByGameId(game._id);
 		const hydratedScores = await Promise.all(
 			linkedScores.map(
 				async (score) => await this._scoreService.HydrateScore(score),

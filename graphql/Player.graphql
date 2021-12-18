@@ -1,0 +1,4 @@
+type Player @key(fields: "_id") {
+	_id: ID!
+	playerName: String!
+}

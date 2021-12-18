@@ -9,6 +9,7 @@
     "server:games": "NODE_PATH=. nodemon ./games.ts",
     "server:leagues": "NODE_PATH=. nodemon ./leagues.ts",
     "server:players": "NODE_PATH=. nodemon ./players.ts",
+    "server:scores": "NODE_PATH=. nodemon ./scores.ts",
     "graphql": "NODE_PATH=. nodemon ./index.ts"
   },
   "author": "",

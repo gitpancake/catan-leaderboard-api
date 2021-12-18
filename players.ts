@@ -1,27 +1,46 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 
-import { Player } from './types';
+import { FileReader } from './services/files/FileReader';
+
+import * as Database from './types/database';
+import * as GraphQL from './types/graphql';
+
+import PlayerService from './services/players';
+
 import { createDatabaseConnection } from './services/database/connection';
-import { FindAllPlayers } from './services/database/players/database';
 
 require('dotenv').config();
 
-const typeDefs = gql`
-	type Player @key(fields: "_id") {
-		_id: ID!
-		playerName: String!
-	}
+const graphQLSchema = new FileReader('./graphql/Player.graphql').getFile();
+const typeDefs = gql(graphQLSchema);
 
-	extend type Query {
-		players: [Player]
-	}
-`;
+const _playerService = new PlayerService();
 
 const resolvers = {
+	Player: {
+		async __resolveReference(ref: Database.Ref) {
+			return _playerService.HydratePlayer(ref._id);
+		},
+	},
 	Query: {
-		players: async (): Promise<Player[]> => {
-			return await FindAllPlayers();
+		players: async (): Promise<GraphQL.Player[]> => {
+			const players: Database.Player[] = await _playerService.GetAllPlayers();
+			return await Promise.all(
+				players.map(
+					async (player: Database.Player) =>
+						await _playerService.HydratePlayer(player._id),
+				),
+			);
+		},
+	},
+	Mutation: {
+		createPlayer: async (_, userPayload): Promise<GraphQL.Player> => {
+			const { playerName } = userPayload.userPayload;
+
+			const newPlayer = await _playerService.CreatePlayer(playerName);
+
+			return await _playerService.HydratePlayer(newPlayer._id);
 		},
 	},
 };
