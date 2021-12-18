@@ -9,7 +9,7 @@ import { createDatabaseConnection } from './services/database/connection';
 
 require('dotenv').config();
 
-const graphQLSchema = new FileReader('./graphql/League.graphql').getFile();
+const graphQLSchema = new FileReader('./graphql/League.graphql').readFile();
 const typeDefs = gql(graphQLSchema);
 
 const _leagueService = new LeagueService();

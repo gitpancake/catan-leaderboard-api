@@ -9,7 +9,7 @@ import { FileReader } from './services/files/FileReader';
 
 require('dotenv').config();
 
-const graphQlSchema = new FileReader('./graphql/Games.graphql').getFile();
+const graphQlSchema = new FileReader('./graphql/Games.graphql').readFile();
 const typeDefs = gql(graphQlSchema);
 
 const _gameService = new GameService();

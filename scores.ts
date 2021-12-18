@@ -9,7 +9,7 @@ import { FileReader } from './services/files/FileReader';
 
 require('dotenv').config();
 
-const graphQlSchema = new FileReader('./graphql/Scores.graphql').getFile();
+const graphQlSchema = new FileReader('./graphql/Scores.graphql').readFile();
 const typeDefs = gql(graphQlSchema);
 
 const _scoreService = new ScoreService();
@@ -26,7 +26,7 @@ const resolvers = {
 		scoresForGame: async (_, userPayload): Promise<GraphQL.Score[]> => {
 			const { gameId } = userPayload;
 
-			const scores = await _scoreService.GetScoresForGame(gameId);
+			const scores = await _scoreService.GetScoresByGameId(gameId);
 
 			return await Promise.all(
 				scores.map(
@@ -44,6 +44,6 @@ const server = new ApolloServer({
 
 createDatabaseConnection();
 
-server.listen({ port: 4005 }).then(({ url }) => {
+server.listen({ port: 4004 }).then(({ url }) => {
 	console.log(`🚀 Scores Service ready at ${url}`);
 });

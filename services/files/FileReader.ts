@@ -7,7 +7,7 @@ export class FileReader {
 		this.fileString = readFileSync(filePath, format);
 	}
 
-	getFile() {
+	readFile() {
 		return this.fileString;
 	}
 }

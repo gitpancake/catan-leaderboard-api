@@ -10,6 +10,7 @@ const gateway = new ApolloGateway({
 		{ name: 'leagues', url: 'http://localhost:4001' },
 		{ name: 'games', url: 'http://localhost:4002' },
 		{ name: 'players', url: 'http://localhost:4003' },
+		{ name: 'scores', url: 'http://localhost:4004' },
 	],
 });
 
