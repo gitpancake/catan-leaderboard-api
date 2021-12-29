@@ -12,7 +12,7 @@ import { createDatabaseConnection } from './services/database/connection';
 
 require('dotenv').config();
 
-const graphQLSchema = new FileReader('./graphql/Player.graphql').getFile();
+const graphQLSchema = new FileReader('./graphql/Player.graphql').readFile();
 const typeDefs = gql(graphQLSchema);
 
 const _playerService = new PlayerService();
