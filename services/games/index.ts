@@ -83,9 +83,10 @@ export default class GameService implements IGameService {
 			),
 		);
 
-		const { date } = game;
+		const { date, _id } = game;
 
 		return {
+			_id,
 			date,
 			scores: hydratedScores,
 		};

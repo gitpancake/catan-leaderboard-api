@@ -1,7 +1,7 @@
 import * as GraphQL from '../graphql';
 
 export interface League {
-	id: string;
+	_id: string;
 	name: string;
 	games: GraphQL.Game[];
 }

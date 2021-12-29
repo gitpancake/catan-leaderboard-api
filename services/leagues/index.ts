@@ -32,10 +32,10 @@ export default class LeagueService implements ILeagueService {
 	}
 
 	async HydrateLeague({
-		_id: leagueId,
+		_id,
 		name: leagueName,
 	}: Database.League): Promise<GraphQL.League> {
-		const games = await this._gameService.GetGamesForLeague(leagueId);
+		const games = await this._gameService.GetGamesForLeague(_id);
 		const hydratedGames = await Promise.all(
 			games.map(
 				async (game: Database.Game) =>
@@ -44,7 +44,7 @@ export default class LeagueService implements ILeagueService {
 		);
 
 		return {
-			id: leagueId,
+			_id,
 			name: leagueName,
 			games: hydratedGames,
 		};

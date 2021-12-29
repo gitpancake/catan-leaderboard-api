@@ -1,4 +1,5 @@
 export interface Score {
+	_id: string;
 	playerName: string;
 	victoryPoints: number;
 	cities: number;

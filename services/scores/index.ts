@@ -54,14 +54,26 @@ export default class ScoreService implements IScoreService {
 			player = await this._playerService.GetPlayerById(score.playerId);
 		}
 
+		const { playerName } = player;
+		const {
+			_id,
+			victoryPoints,
+			cities,
+			settlements,
+			longestRoads,
+			largestArmies,
+			devPoints,
+		} = score;
+
 		return {
-			playerName: player.playerName,
-			victoryPoints: score.victoryPoints,
-			cities: score.cities,
-			settlements: score.settlements,
-			longestRoads: score.longestRoads,
-			largestArmies: score.largestArmies,
-			devPoints: score.devPoints,
+			_id,
+			playerName,
+			victoryPoints,
+			cities,
+			settlements,
+			longestRoads,
+			largestArmies,
+			devPoints,
 		};
 	}
 }
