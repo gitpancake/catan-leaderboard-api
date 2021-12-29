@@ -30,5 +30,3 @@ extend type Query {
 extend type Mutation {
 	createGame(userPayload: CreateGameInput): Game
 }
-
-mongoexport --uri mongodb+srv://sudo1JjR692bmwhMSnHkf5@cluster0.4jcfa.mongodb.net/catan-leaderboard --collection games --type json --out games.json
