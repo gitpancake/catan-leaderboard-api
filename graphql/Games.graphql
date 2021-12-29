@@ -1,21 +1,10 @@
 type Game @key(fields: "_id") {
 	_id: ID!
 	date: String!
-	scores: [Score]
 }
 
-type Score {
-	playerName: String!
-	victoryPoints: Int!
-	cities: Int!
-	settlements: Int!
-	longestRoads: Int!
-	largestArmies: Int!
-	devPoints: Int!
-}
-
-extend type Query {
-	games: [Game]
+extend type Score @key(fields: "_id") {
+	_id: ID! @external
 }
 
 input ScoreInput {
@@ -34,6 +23,12 @@ input CreateGameInput {
 	scores: [ScoreInput]
 }
 
+extend type Query {
+	games: [Game]
+}
+
 extend type Mutation {
 	createGame(userPayload: CreateGameInput): Game
 }
+
+mongoexport --uri mongodb+srv://sudo1JjR692bmwhMSnHkf5@cluster0.4jcfa.mongodb.net/catan-leaderboard --collection games --type json --out games.json

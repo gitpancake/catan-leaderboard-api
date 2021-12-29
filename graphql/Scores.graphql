@@ -1,4 +1,5 @@
-type Score {
+type Score @key(fields: "_id") {
+	_id: ID!
 	playerName: String!
 	victoryPoints: Int!
 	cities: Int!
@@ -9,5 +10,5 @@ type Score {
 }
 
 extend type Query {
-	scoresForGame: [Score]
+	scores: [Score]
 }

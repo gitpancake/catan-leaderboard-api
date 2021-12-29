@@ -2,3 +2,7 @@ type Player @key(fields: "_id") {
 	_id: ID!
 	playerName: String!
 }
+
+extend type Query {
+	players: [Player]
+}
